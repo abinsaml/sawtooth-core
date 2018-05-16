@@ -144,5 +144,39 @@ public class State {
 
     return addressesThatWereSet;
   }
+ /**Add a blob to the execution result for this transaction.
+   *
+   * @param data - the data to add
+   * @throws InternalError something went wrong processing transaction
+   */
+  public void addTransactionReceipt(ByteString data)
+                    throws InternalError, InvalidTransactionException {
+    TpReceiptAddDataRequest setAddDataRequest = TpReceiptAddDataRequest
+                                                .newBuilder()
+                                                .setContextId(this.contextId)
+                                                .setData(data)
+                                                .build();
+    Future future = stream.send(Message.MessageType.TP_RECEIPT_ADD_DATA_REQUEST,
+                    setAddDataRequest.toByteString());
+    TpReceiptAddDataResponse setAddDataResponse = null;
+    try {
+      setAddDataResponse = TpReceiptAddDataResponse
+                           .parseFrom(future.getResult(TIME_OUT));
+    } catch (InterruptedException iee) {
+      throw new InternalError(iee.toString());
+    } catch (InvalidProtocolBufferException ipbe) {
+      throw new InternalError(ipbe.toString());
+    } catch (ValidatorConnectionError vce) {
+      throw new InternalError(vce.toString());
+    } catch (Exception e) {
+      throw new InternalError(e.toString());
+    }
+    if (setAddDataResponse != null) {
+      if (setAddDataResponse.getStatus() == TpReceiptAddDataResponse.Status.ERROR) {
+        throw new InternalError("Failed to add receipt data " + data.toString());
+      }
+    }
+  }
+
 
 }
