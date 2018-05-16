@@ -23,6 +23,8 @@ import sawtooth.sdk.processor.exceptions.InternalError;
 import sawtooth.sdk.processor.exceptions.InvalidTransactionException;
 import sawtooth.sdk.processor.exceptions.ValidatorConnectionError;
 import sawtooth.sdk.protobuf.Message;
+import sawtooth.sdk.protobuf.TpReceiptAddDataRequest;
+import sawtooth.sdk.protobuf.TpReceiptAddDataResponse;
 import sawtooth.sdk.protobuf.TpStateEntry;
 import sawtooth.sdk.protobuf.TpStateGetRequest;
 import sawtooth.sdk.protobuf.TpStateGetResponse;
@@ -144,7 +146,7 @@ public class State {
 
     return addressesThatWereSet;
   }
- /**Add a blob to the execution result for this transaction.
+  /**Add a blob to the execution result for this transaction.
    *
    * @param data - the data to add
    * @throws InternalError something went wrong processing transaction
