@@ -151,12 +151,12 @@ public class State {
    * @param data - the data to add
    * @throws InternalError something went wrong processing transaction
    */
-  public void addTransactionReceipt(ByteString data)
+  public void addTransactionReceipt(byte[] data)
                     throws InternalError, InvalidTransactionException {
     TpReceiptAddDataRequest setAddDataRequest = TpReceiptAddDataRequest
                                                 .newBuilder()
                                                 .setContextId(this.contextId)
-                                                .setData(data)
+                                                .setData(ByteString.copyFrom(data))
                                                 .build();
     Future future = stream.send(Message.MessageType.TP_RECEIPT_ADD_DATA_REQUEST,
                     setAddDataRequest.toByteString());
